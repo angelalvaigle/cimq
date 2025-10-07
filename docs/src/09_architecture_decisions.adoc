@@ -1,0 +1,26 @@
+[[section-design-decisions]]
+
+== Architecture Decisions
+
+This section describes the architecture decisions that were made during the development of the project.
+
+=== Technology Decisions:
+
+**- Decision 1 - Use of Microservices**: 
+The system is designed as a set of microservices, each responsible for a specific domain or functionality. This architecture allows for better scalability, maintainability, and flexibility.
+
+**- Decision 2 - Use of node.js for Backend Services**: 
+The backend services of the system are built using node.js, a JavaScript runtime. Node.js was chosen for its performance, scalability, and ease of use.
+
+**- Decision 3 - Use of a NoSQL Database**: 
+A NoSQL database was chosen for the system due to its flexibility and scalability. The system uses MongoDB as its primary database.
+
+**- Decision 4 - Use of a React Frontend**: 
+The frontend of the system is built using React, a JavaScript library for building user interfaces. React was chosen for its performance, flexibility, and ease of use.
+
+**- Decision 5 - Use of Docker Containers**: 
+The system is deployed using Docker containers. This architecture allows for better portability, scalability, and isolation of services.
+
+**- Decision 6 - Use of a RESTful API**: 
+The system exposes a RESTful API for communication between the frontend and the microservices. This architecture allows for better decoupling between the frontend and backend components.
+

@@ -1,0 +1,123 @@
+[[section-runtime-view]]
+
+== Runtime View
+
+=== User Registration and Profile Update
+
+User registration and profile update in the application is managed through the user microservice (userservice). The user completes the form, and upon successful submission, a confirmation message is displayed. Otherwise, an error message is shown.
+
+[plantuml, "user_registration", svg]
+----
+actor user
+participant webapp as "webApp"
+participant gw as "gateway"
+participant userserv as "user serv"
+participant mongo as "MongoDB"
+
+user --> webapp: fill form
+webapp -> gw: post request
+gw -> userserv: post request
+userserv -> mongo: create user
+mongo -> userserv: 200
+userserv -> gw: 200
+gw -> webapp: 200
+webapp --> user: confirmation message
+
+----
+
+=== Login
+
+The application's login is managed through the authentication microservice (authservice). The user enters their credentials, and if the information is correct, a view of the application with the available options is displayed.
+
+[plantuml, "login", svg]
+----
+actor user
+participant webapp as "webApp"
+participant gw as "gateway"
+participant authserv as "auth serv"
+participant mongo as "MongoDB"
+
+user --> webapp: enter credentials
+webapp -> gw: post request
+gw -> authserv: post request
+authserv -> mongo: find user
+mongo -> authserv: 200
+authserv -> gw: 200
+gw -> webapp: 200
+webapp --> user: confirmation message
+----
+
+=== Play
+
+The quiz game is managed through the question microservice (questionservice). The user starts a new game, and a new question with its corresponding answers is displayed.
+
+[plantuml, "play", svg]
+----
+actor user
+participant webapp as "webApp"
+participant gw as "gateway"
+participant qserv as "question serv"
+participant mongo as "MongoDB"
+
+user --> webapp: start game
+webapp -> gw: get request
+gw -> qserv: get request
+qserv -> mongo: questions
+mongo -> qserv: 200
+qserv -> gw: 200
+gw -> webapp: 200
+webapp --> user: ask question
+user --> webapp: answer question
+webapp --> user: give feedback
+----
+
+=== Statistics
+
+The application's statistics module is handled by the statistics microservice (statservice). Upon user request, the game statistics are presented in a view.
+
+[plantuml, "stats", svg]
+----
+actor user
+participant webapp as "webApp"
+participant gw as "gateway"
+participant statserv as "stat serv"
+participant mongo as "MongoDB"
+
+user --> webapp: enter stats page
+webapp -> gw: get request
+gw -> statserv: get request
+statserv -> mongo: stats
+mongo -> statserv: 200
+statserv -> gw: 200
+gw -> webapp: 200
+webapp --> user: show stats view
+----
+
+=== Ranking
+
+The application also includes a user ranking, obtained through the statistics (statservice) and user microservices (userservice).
+
+[plantuml, "ranking", svg]
+----
+actor user
+participant webapp as "webApp"
+participant gw as "gateway"
+participant statserv as "stats serv"
+participant userserv as "user serv"
+participant mongo as "MongoDB"
+
+user --> webapp: enter ranking page
+webapp -> gw: get request
+gw -> statserv: get request
+statserv -> mongo: ranking
+mongo -> statserv: 200
+statserv -> gw: 200
+gw -> webapp: 200
+webapp -> gw: get request
+gw -> userserv: get request
+userserv -> mongo: find user
+mongo -> userserv: 200
+userserv -> gw: 200
+gw -> webapp: 200
+webapp --> user: show ranking
+----

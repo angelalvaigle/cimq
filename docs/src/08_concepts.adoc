@@ -1,0 +1,82 @@
+[[section-concepts]]
+
+== Cross-cutting Concepts
+This section describes overall, principal regulations and solution ideas that are relevant in multiple parts (= cross-cutting) of the system.
+
+=== Domain concepts
+**- Domain model**: The domain model, including the key classes and their most important attributes, is illustrated in the following diagram.
+
+[plantuml, "domain_model", svg]
+----
+!define rectangle class
+
+rectangle User {
+    +userId: String
+    +name: String
+    +lastName: String
+    +email: String
+    +username: String
+    +passwordHash: String
+}
+
+rectangle Question {
+    +questionId: String
+    +name: String
+    +hint1: String
+    +hint2: String
+    +right: String
+    +wrong1: String
+    +wrong2: String
+    +wrong3: String
+}
+
+rectangle Statistic {
+    +statId: String
+    +userId: String
+    +gameId: String
+    +questionId: String
+    +right: Boolean
+    +time: Int
+    +points: Int
+}
+
+User "1" -- "0..*" Question : answers
+User "1" -- "0..*" Statistic : has
+Question "1" -- "0..*" Statistic : generates
+----
+
+=== User Experience Concepts (UX)
+
+**- Usability tests**: Usability tests will be conducted to ensure a pleasant user experience.
+
+=== Safety and Security Concepts
+
+**- Password Hashing**: During the registration process, user passwords will be hashed using a secure algorithm on the frontend before being sent and stored in the database.
+Later, during the login process, passwords are retrieved hashed from the database and decrypted on the frontend.
+
+=== Architecture and Design Patterns
+
+**- Microservices**: The system will be designed as a set of microservices, each responsible for a specific domain or functionality.
+
+=== "Under-the-hood"
+
+**- Persistency**: The system will use a nosql database (Mongo DB) to store data.
+
+**- Transaction handling**: Transaction handling in the app begins with the frontend sending a request to the gateway, which routes it to the appropriate microservices. Each service processes its part of the transaction, interacting with the MongoDB database as needed to retrieve or update data. Once all services complete their operations, the results are sent back through the gateway to the frontend.
+
+**- Session handling**: The system will use JWT tokens for session handling.
+
+**- Exception and error handling**: A server-side validation layer will be develop to catch and handle exceptions and errors effectively.
+
+
+=== Development Concepts
+
+**- CI/CD**: The system will be developed using GitHub Actions for continuous integration and continuous deployment (CI/CD).
+
+=== Operational Concepts
+**- Administration**: The system will provide an administration interface to manage users, roles, and other system settings.
+
+**- Scalability**: The system will be deployed on an Azure virtual machine, which allows for easy scaling.
+
+**- Monitoring**: The system will be monitored using Prometheus and Grafana. Prometheus is an open-source monitoring and alerting toolkit. Grafana is a visualization tool that allows you to create dashboards and graphs.
+

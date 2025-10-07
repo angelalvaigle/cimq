@@ -1,0 +1,68 @@
+[[test-report]]
+
+== Test Report
+
+Following tests were done to ensure the functionality, performance, and user experience of the application, including unit tests, end-to-end (E2E) tests, load tests, and usability tests.
+These tests aimed to validate individual components, overall system behavior, scalability, and ease of use
+
+=== Unit tests
+Comprehensive unit tests were conducted to ensure the reliability and functionality of the entire application, including both the frontend and the microservices (gateway, user, auth, question, and statistics). The testing approach focused on validating each component in isolation, ensuring proper interaction between the frontend and microservices.
+As a result, an overall test coverage of 80.2% on new code was achieved, reflecting strong code quality and stability. Detailed test results, including coverage breakdowns for each service and component, will be presented in the following section.
+
+=== Code coverage result
+The unit tests coverage, with a detailed breakdown, is shown in Image 13.1. It provides an overview of the coverage across the application's components and services.
+
+image::13_1_codecoverage.png["Sonarcloud code coverage"]
+
+=== E2E tests
+The following end-to-end (E2E) tests were performed to validate key features of the application:
+
+**- Registering a new user**: Tested that an unregistered user could successfully fill out the registration form and receive a confirmation message.
+
+**- User login**: Ensured that a registered user could log in and see a confirmation message upon successful submission of their credentials.
+
+**- User profile view**: Verified that a logged-in user could access and view their profile.
+
+**- User plays game**: Checked that a logged-in user could press play and see a question displayed on the screen.
+
+These tests were executed both locally, with manual browser observation, and headlessly in GitHub Actions. Locally, all tests were successful, but the "User plays game" test failed in GitHub Actions. This issue remains unresolved due to time constraints.
+
+=== Load tests
+
+Load tests were conducted on the application in the production environment using Gatling. The primary goal was to evaluate the login functionality under increasing user load. The following configuration was used for the test:
+
+```javascript
+setUp(scn.injectOpen(rampUsers(1000).during(300))).protocols(httpProtocol);
+```
+
+This setup simulated a gradual increase from 0 to 1000 users over a period of 5 minutes. The results obtained from the tests are summarized below:
+
+**Response Performance**
+
+image::13_4_gatling.png["Main results"]
+
+The results were highly satisfactory. All responses during the simulation were successful (HTTP 200), with response times consistently below 200 milliseconds. This demonstrates the system's ability to handle load efficiently without any significant delays.
+
+**Active Users**
+
+image::13_4_gatling_users.png["Active Users per Second"]
+
+On average, the number of active users per second during the 5-minute simulation was approximately 15. This indicates the system's ability to maintain a steady throughput while accommodating multiple concurrent users.
+
+**Requests per Second**
+
+image::13_4_gatling_responses.png["Responses per Second"]
+
+The average number of responses processed per second during the simulation was 24. This metric reflects the application’s capacity to handle a consistent flow of requests efficiently.
+
+**Response Time Distribution**
+
+image::13_4_gatling_resp_distr.png["Response Time Distribution"]
+
+The maximum response time observed throughout the test was under 200 milliseconds, further confirming the system's stability and quick response under load.
+
+=== Usability tests
+
+Informal usability tests were conducted with a few friends to gather feedback on the application's user experience. During the tests, they navigated through the main features, including registration, login, and playing the game. The feedback was generally positive, with users finding the interface intuitive and easy to use.
+
+The main suggestion for improvement was to reduce the loading time of images fetched from Wikidata. This could be addressed by storing the images locally to enhance performance. Overall, the application met their expectations for usability.

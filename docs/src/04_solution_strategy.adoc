@@ -1,0 +1,45 @@
+[[section-solution-strategy]]
+
+== Solution Strategy
+
+=== Technology decisions
+[cols="1,2", options="header"]
+|===
+| Technology | Description
+| Git
+| Software version control system
+| GitHub
+| Cloud-based service that hosts the aforementioned version control system, Git.
+| Node.js
+| Runtime environment for JavaScript that enables the development of scalable server-side applications.
+| Express
+| Framework for building web applications in Node.js.
+| React
+| JavaScript library that allows us to create interactive user interfaces easily. It is based on components.
+| Docker
+| Tool that simplifies the creation, deployment, and execution of applications using containers. Containers allow you to package an application with all its required components, such as libraries and other dependencies, and deploy it as a single package.
+| Puppeteer
+| Test automation tool for web browsers developed by Google. It allows control of the browser through an API.
+|===
+
+=== Decisions about the top-level decomposition of the system
+A microservices architecture has been chosen, with distinct modules assigned to each functionality. This approach allows for better scalability, maintainability, and flexibility.
+
+=== Decisions on how to achieve quality goals
+[cols="1,2", options="header"]
+|===
+| Quality Goal | Implementation
+| Usability
+| The team will focus on designing a clear and accessible interface for all users. To achieve this, we will adhere to web usability standards and perform usability tests.
+| Testability
+| Unit tests and end-to-end (E2E) integration tests will be created to ensure the software is reliable, robust, and free of errors.
+| Performance
+| We will focus on optimizing the application's performance to ensure fast response times and efficient resource usage. This includes implementing performance best practices and monitoring the system to address any potential bottlenecks.
+| Reliability
+| Our goal is to ensure that the application operates consistently and without interruptions. This involves implementing robust error-handling mechanisms, conducting regular system tests, and designing the system to recover gracefully from failures.
+| Security
+| We will implement all necessary measures to secure our application.
+|===
+
+=== Relevant organizational decisions
+The team will follow an agile development methodology to ensure flexibility and adaptability throughout the project.

@@ -1,0 +1,22 @@
+[[section-glossary]]
+
+== Glossary
+
+[cols="1,4" options="header"]
+|===
+|Term | Definition
+| API | Application Programming Interface, which is a set of rules and protocols that allows different software applications to communicate with each other.
+| Backend | Internal part of the application's architecture, which is responsible for processing requests and generating responses.
+| CI/CD | Continuous Integration and Continuous Deployment, which is a set of practices that automate the integration of code changes and the deployment of applications.
+| Container | Standardized unit of software that packages up code and all its dependencies so that the application runs quickly and reliably from one computing environment to another.
+| Database | Collection of information that is organized so that it can be easily accessed, managed, and updated.
+| Frontend | External part of the application's architecture, which is visible to the user and interacts with the backend.
+| JSON | Data format that is easy to read and write for humans and easy to parse and generate for machines.
+| Microservice | Architectural style that structures an application as a collection of small services, each running in its own process and communicating with lightweight mechanisms.
+| Performance | Ability of a software system to provide a certain level of service in terms of throughput, response time, and resource utilization.
+| Reliability | Ability of a system to perform and maintain its functions in routine circumstances, as well as hostile or unexpected circumstances.
+| Scalability | Ability of a software system to handle a growing amount of work or its potential to accommodate growth.
+| Security | Ability of a software system to protect data and functionality from unauthorized access and malicious attacks.
+| Testability | Ability of a software system to be tested.
+| Usability | Degree to which a software can be used by specified consumers to achieve quantified objectives with effectiveness, efficiency, and satisfaction in a quantified context of use.
+|===

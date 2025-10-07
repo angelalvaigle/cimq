@@ -1,0 +1,31 @@
+{
+  "questions": [
+	  { "type": "vocabulary", "path": "n/a", "name": "vista", "right":"sight" },
+    { "type": "vocabulary", "path": "n/a", "name": "olfato", "right":"smell" },
+    { "type": "vocabulary", "path": "n/a", "name": "oido", "right":"hearing" },
+	  { "type": "vocabulary", "path": "n/a", "name": "gusto", "right":"taste" },
+    { "type": "vocabulary", "path": "n/a", "name": "tacto", "right":"touch" },
+    { "type": "vocabulary", "path": "n/a", "name": "huesos", "right":"bones" },
+    { "type": "vocabulary", "path": "n/a", "name": "músculo", "right":"muscle" },
+    { "type": "vocabulary", "path": "n/a", "name": "articulación", "right":"joint" },
+    { "type": "vocabulary", "path": "n/a", "name": "esqueleto", "right":"skeleton" },
+    { "type": "vocabulary", "path": "n/a", "name": "masculino", "right":"male" },
+    { "type": "vocabulary", "path": "n/a", "name": "femenino", "right":"female" },
+    { "type": "vocabulary", "path": "n/a", "name": "cerebro", "right":"brain" },
+    { "type": "vocabulary", "path": "n/a", "name": "tallo cerebral", "right":"brain stem" },
+    { "type": "vocabulary", "path": "n/a", "name": "nervio", "right":"nerve" },
+    { "type": "vocabulary", "path": "n/a", "name": "sistema nervioso", "right":"nervous system" },
+    { "type": "vocabulary", "path": "n/a", "name": "sistema circulatorio", "right":"circulatory system" },
+    { "type": "vocabulary", "path": "n/a", "name": "sangre", "right":"blood" },
+    { "type": "vocabulary", "path": "n/a", "name": "corazón", "right":"heart" },
+    { "type": "vocabulary", "path": "n/a", "name": "amargo", "right":"bitter" },
+    { "type": "vocabulary", "path": "n/a", "name": "dulce", "right":"sweet" },
+    { "type": "vocabulary", "path": "n/a", "name": "ácido", "right":"sour" },
+    { "type": "vocabulary", "path": "n/a", "name": "salado", "right":"salty" },
+    { "type": "vocabulary", "path": "n/a", "name": "rugoso", "right":"rough" },
+    { "type": "vocabulary", "path": "n/a", "name": "duro", "right":"hard" },
+    { "type": "vocabulary", "path": "n/a", "name": "blando", "right":"soft" },
+    { "type": "vocabulary", "path": "n/a", "name": "suave", "right":"smooth" },
+    { "type": "vocabulary", "path": "n/a", "name": "fosas nasales", "right":"nostrils" }
+  ]
+}

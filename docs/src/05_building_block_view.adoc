@@ -1,0 +1,126 @@
+[[section-building-block-view]]
+
+== Building Block View
+
+=== Whitebox of the Overall System 
+[plantuml, "whitebox_overall_system", svg]
+----
+actor user
+component wiq as "wiq"
+component wikidata as "wikidata"
+
+user -right-> wiq: interact
+wiq <-right-> wikidata: query
+----
+
+Motivation::
+WIQ is a web application where users can register and start playing. The game consists of answering a series of questions of various types and topics, with a reward for each correct answer. An important aspect of the system is that the questions will be automatically generated from Wikidata data (https://www.wikidata.org/).
+
+Contained Building Blocks::
+[cols="1,2" options="header"]
+|===
+| Name | Responsibility
+| User | The user interacts with the application.
+| WIQ | The application is used by the user and communicates with Wikidata to generate questions automatically.
+| Wikidata | Collaborative database of free knowledge that stores structured data.
+|===
+
+=== Level 1
+[plantuml, "level_1", svg]
+----
+actor user as "user"
+
+component web as "wiq" {  
+  component front as "Frontend"
+  component back as "Backend"
+  database mongo as "MongDB"      
+}
+
+Component wikidata as "wikidata"
+
+user <-right-> front: interact
+front <-right-> back: interact
+back <-right-> mongo: read/write
+back <-down-> wikidata: query
+----
+
+Motivation::
+The main components of WIQ are shown here.
+
+Contained Building Blocks::
+[cols="1,2" options="header"]
+|===
+| Name | Responsibility
+| User | The user interacts with the application.
+| Frontend Web | Component responsible for the system's user interface. It provides access to the system's functionalities through a web browser.
+| Backend | It contains the business logic and data management of the system. It exposes endpoints to interact with clients through an API.
+| MongoDB | NoSQL database management system that uses a flexible data model based on JSON documents with dynamic schemas.
+| Wikidata | Collaborative database of free knowledge that stores structured data.
+|===
+
+=== Level 2
+[plantuml, "level_2", svg]
+----
+left to right direction
+
+actor user as "user"
+component web as "wiq" { 
+  component front as "Frontend"
+  component "Services"  {
+    component gw as "Gateway"
+    component userserv as "User service"
+    component authserv as "Authentication service"
+    component statsserv as "Statistic service"
+    component questionserv as "Question service"
+  }
+database mongo as "MongDB"      
+}
+component wikidata as "wikidata"
+
+user <--> front: interact
+front <--> gw: interact
+
+gw <--> userserv: register
+gw <--> authserv: login
+gw <--> statsserv: generate stats
+gw <--> questionserv: generate questions
+
+userserv <--> mongo: read/write
+authserv <--> mongo: read/write
+statsserv <--> mongo: read/write
+questionserv <--> mongo: read/write
+questionserv <-l-> wikidata: query
+
+userserv -[hidden]l- authserv
+authserv -[hidden]l- statsserv
+statsserv -[hidden]l- questionserv
+----
+
+Motivation::
+A detailed breakdown of the WIQ microservices is presented.
+
+Contained Building Blocks::
+[cols="1,2" options="header"]
+|===
+| Name | Responsibility
+| User 
+| The user who plays the game.
+| Wiq 
+| The application is used by players and interacts with Wikidata to automatically generate questions.
+| Frontend
+| The user interface of the application.
+| Gateway
+| The entry point of the application.
+| User service
+| Manages user data.
+| Authentication service
+| Manages user authentication.
+| Statistic service
+| Manages game statistics.
+| Question service
+| Handles the generation and formulation of game questions.
+| MongoDB
+| Database used to store the data of the application.
+| Wikidata 
+| Collaborative database of free knowledge that stores structured data (https://www.wikidata.org/).
+|===

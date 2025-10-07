@@ -1,0 +1,45 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Copiar errors, middleware y utils a cada servicio si es necesario
+      - run: cp -R utils/ users/authservice/
+      - run: cp -R errors/ users/userservice/
+      - run: cp -R middleware/ users/userservice/
+      - run: cp -R utils/ users/userservice/
+      - run: cp -R errors/ questionservice/
+      - run: cp -R middleware/ questionservice/
+      - run: cp -R utils/ questionservice/
+      - run: cp -R middleware/ statservice/
+      # Instalar dependencias
+      - run: npm --prefix users/authservice ci
+      - run: npm --prefix users/userservice ci
+      - run: npm --prefix questionservice ci
+      - run: npm --prefix statservice ci
+      - run: npm --prefix gatewayservice ci
+      - run: npm --prefix webapp ci
+      # Ejecutar tests
+      - run: npm --prefix users/authservice test -- --coverage
+      - run: npm --prefix users/userservice test -- --coverage
+      - run: npm --prefix questionservice test -- --coverage
+      - run: npm --prefix statservice test -- --coverage
+      - run: npm --prefix gatewayservice test -- --coverage
+      - run: npm --prefix webapp test -- --coverage
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -1,0 +1,82 @@
+[[section-deployment-view]]
+
+== Deployment View
+
+[plantuml, "deployment_view", svg]
+----
+actor User
+left to right direction
+
+node "Ubuntu Azure VM" {
+    node "wiq" {
+      node "Docker1" {
+        rectangle "Frontend"
+      }
+      node "Docker2" {
+        rectangle "Gateway"
+      }
+      node "Docker3" {
+        rectangle "User Service"
+      }
+      node "Docker4" {
+        rectangle "Authentication Service"
+      }
+      node "Docker5" {
+        rectangle "Statistic Service"
+      }
+      node "Docker6" {
+        rectangle "Question Service"
+      }
+      node "Docker7" {
+        database "MongoDB"
+      }
+    } 
+}
+
+rectangle "Wikidata"
+
+User <--> Frontend : interact
+Frontend <--> Gateway
+
+Gateway <--> "User Service" 
+Gateway <--> "Authentication Service" 
+Gateway <--> "Statistic Service" 
+Gateway <--> "Question Service" 
+
+"User Service" <--> MongoDB 
+"Authentication Service" <--> MongoDB 
+"Statistic Service" <--> MongoDB 
+"Question Service" <--> MongoDB 
+"Question Service" <-l-> Wikidata : query
+----
+
+[cols="1,2" options="header"]
+|===
+| Element | Description
+| User
+| The actor who interacts with the application, representing the players.
+| Azure
+| The cloud platform where the application is deployed.
+| Ubuntu
+| The virtual machine on Azure running the Ubuntu operating system.
+| Docker
+| Technology used to containerize and deploy the microservices and the database.
+| Wiq
+| The main component of the web application, including the frontend and backend services.
+| Frontend
+| The user interface of the application, which the users directly interact with.
+| Gateway
+| The service that acts as an intermediary between the frontend and other backend services.
+| User Service
+| The service that handles user data.
+| Authentication Service
+| The service responsible for user authentication.
+| Statistic Service
+| The service responsible for generating and managing user statistics.
+| Question Service
+| The service responsible for generating and managing the game questions.
+| MongoDB
+| The database where the application data is stored.
+| Wikidata
+| An external component that is queried to obtain additional data for the game questions.
+|===

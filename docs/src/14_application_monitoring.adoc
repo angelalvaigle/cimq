@@ -1,0 +1,11 @@
+[[application-monitoring]]
+
+== Application Monitoring
+
+The application is actively monitored using Prometheus and Grafana to ensure optimal performance and reliability.
+Prometheus collects real-time metrics from the application, which are visualized in a Grafana dashboard.
+
+The dashboard provides key insights into the application's behavior, featuring three critical graphs: the Number of Requests per Minute, the Number of Failed Requests, and the Amount of Time to Process a Request. These metrics help us track the application's health, identify bottlenecks, and respond promptly to any issues.
+You can access the Grafana dashboard for this monitoring setup link:http://4.233.148.160:9091/d/1DYaynomMk/wiq7-dashboard[here].
+
+image::14_grafana.png["Application Monitoring with Prometheus and Grafana"]

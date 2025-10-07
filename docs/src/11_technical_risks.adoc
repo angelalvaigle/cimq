@@ -1,0 +1,16 @@
+[[section-technical-risks]]
+
+== Risks and Technical Debts
+
+Below is a table presenting the risks and potential technical debts considered by the development team.
+
+[cols="1,2,2" options="header"]
+|===
+| Risk | Description | Preventive Measure
+| Inexperience with the technologies used | Due to potential inexperience with the technologies used in the project, technical debts may arise. | To minimize the impact, it is recommended to research and test the technologies to achieve a basic level of proficiency with them.
+| Dependency on wikidata | The project relies on the Wikidata API to retrieve data. If the API is unavailable, the project may not function as expected. | To mitigate this risk, it is recommended to implement a fallback mechanism that uses a local database to store data.
+| Code loss | The project may suffer from code loss due to a lack of proper version control. | To prevent this, Git will be used as the version control system for managing the code and storing it in a remote repository.
+| Loss of code quality | The project may suffer from a loss of code quality due to the lack of experience with the technologies used. | To prevent this, it is recommended to use code quality tools and to follow best practices.
+| Planning issues | The project may suffer from planning issues due to a lack of experience with project management. | To prevent this, It is recommended to divide the project into activities and tasks, estimate their duration, and allow for potential deviations.
+| Only one developer | The team is composed of a single person. | Unfortunately, there is no way to mitigate this risk, so it must be assumed.
+|===

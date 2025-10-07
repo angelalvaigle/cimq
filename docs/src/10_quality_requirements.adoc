@@ -1,0 +1,77 @@
+[[section-quality-scenarios]]
+
+== Quality Requirements
+
+As described in https://angelalvaigle.github.io/wiq_uo17919/#section-introduction-and-goals[section 1: Introduction and Goals], the quality requirements that were identified for the project are:
+
+**- Usability**: the application should be user-friendly and intuitive, allowing users to easily navigate and interact with its features.
+
+**- Testability**: The application should undergo thorough testing, ensuring a clear separation between its logic and presentation layers.
+
+**- Performance**: The application should be able to handle a reasonable number of users and requests without compromising its performance.
+
+**- Reliability**: The application should be reliable, ensuring that it is available and responsive to users at all times.
+
+**- Security**: The application should be secure, protecting users' data and preventing unauthorized access to its features.
+
+=== Quality Tree
+
+[plantuml, "quality_tree", svg]
+----
+rectangle Usefulness 
+rectangle Usability 
+rectangle Testability 
+rectangle Performance 
+rectangle Reliability 
+rectangle Security 
+rectangle HomogeneousDesign as "Homogeneous Design" 
+rectangle SimpleExperience as "Simple Experience"
+rectangle ThoroughTesting as "Thorough Testing"
+rectangle ResourceOptimization  as "Resource Optimization"
+rectangle StablePerformance as "Stable Performance"
+rectangle ErrorHandling as "Error Handling"
+rectangle DataPrivacy as "Data Privacy"
+rectangle BlockUnauthorizedAccess as "Block Unauthorized Access"
+
+Usefulness -- Usability
+Usefulness -- Testability
+Usefulness -- Performance
+Usefulness -- Reliability
+Usefulness -- Security
+
+Usability -- HomogeneousDesign
+Usability -- SimpleExperience
+
+Testability -- ThoroughTesting
+
+Performance -- ResourceOptimization
+Performance -- StablePerformance
+
+Reliability -- ErrorHandling
+
+Security -- DataPrivacy
+Security -- BlockUnauthorizedAccess
+----
+
+=== Quality Scenarios
+
+==== Usage Scenarios
+
+[cols="1,2" options="header"]
+|===
+| Usage Scenario | System Reaction
+| A new user registers in the application. | The system should add the user data to the database and show a confirmation message.
+| The user logs into the application. | The system should verify the user's credentials and grant access to the application.
+| The user starts a new game. | The system should start a new game and display the first question.
+| An authenticated user accesses the statistics section of the website. | The system should display the user's statistics.
+|===
+
+==== Change Scenarios
+
+[cols="1,2" options="header"]
+|===
+| Change Scenario | System Reaction
+| A new game mode is added to the application. | The system should update the game modes list and display the new mode to the users.
+| A new user role is created. | The system should update the user roles list and grant the new role to the users.
+| 2FA authentication is implemented. | The system should add the 2FA authentication feature and require users to enable it.
+|===

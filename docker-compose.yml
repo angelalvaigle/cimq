@@ -1,0 +1,160 @@
+services:
+  mongodb:
+    container_name: mongodb-${teamname:-defaultASW}
+    image: mongo
+    profiles: ['dev', 'prod']
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - mynetwork
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  authservice:
+    container_name: authservice-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/authservice:latest
+    profiles: ['dev', 'prod']
+    build: ./users/authservice
+    volumes:
+      - ./errors:/usr/src/authservice/errors
+      - ./middleware:/usr/src/authservice/middleware
+      - ./utils:/usr/src/authservice/utils
+    depends_on:
+      - mongodb
+    ports:
+      - '8002:8002'
+    networks:
+      - mynetwork
+    environment:
+      MONGODB_USER: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/userdb?authSource=admin
+
+  userservice:
+    container_name: userservice-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/userservice:latest
+    profiles: ['dev', 'prod']
+    build: ./users/userservice
+    volumes:
+      - ./errors:/usr/src/userservice/errors
+      - ./middleware:/usr/src/userservice/middleware
+      - ./utils:/usr/src/userservice/utils
+    depends_on:
+      - mongodb
+    ports:
+      - '8001:8001'
+    networks:
+      - mynetwork
+    environment:
+      MONGODB_USER: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/userdb?authSource=admin
+
+  questionservice:
+    container_name: questionservice-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/questionservice:latest
+    profiles: ['dev', 'prod']
+    build: ./questionservice
+    volumes:
+      - ./errors:/usr/src/questionservice/errors
+      - ./middleware:/usr/src/questionservice/middleware
+      - ./utils:/usr/src/questionservice/utils
+    depends_on:
+      - mongodb
+    ports:
+      - '8003:8003'
+    networks:
+      - mynetwork
+    environment:
+      MONGODB_QUESTION: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/questiondb?authSource=admin
+
+  statservice:
+    container_name: statservice-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/statservice:latest
+    profiles: ['dev', 'prod']
+    build: ./statservice
+    volumes:
+      - ./errors:/usr/src/statservice/errors
+      - ./middleware:/usr/src/statservice/middleware
+      - ./utils:/usr/src/statservice/utils
+    depends_on:
+      - mongodb
+    ports:
+      - '8004:8004'
+    networks:
+      - mynetwork
+    environment:
+      MONGODB_STAT: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/statdb?authSource=admin
+
+  gatewayservice:
+    container_name: gatewayservice-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/gatewayservice:latest
+    profiles: ['dev', 'prod']
+    build: ./gatewayservice
+    depends_on:
+      - mongodb
+      - userservice
+      - authservice
+      - questionservice
+      - statservice
+    ports:
+      - '8000:8000'
+    networks:
+      - mynetwork
+    environment:
+      ORIGIN_URL: http://4.233.148.160:3000
+      AUTH_SERVICE_URL: http://authservice:8002
+      USER_SERVICE_URL: http://userservice:8001
+      QUESTION_SERVICE_URL: http://questionservice:8003
+      STAT_SERVICE_URL: http://statservice:8004
+
+  webapp:
+    container_name: webapp-${teamname:-defaultASW}
+    image: ghcr.io/arquisoft/wiq_7/webapp:latest
+    profiles: ['dev', 'prod']
+    build: ./webapp
+    depends_on:
+      - gatewayservice
+    ports:
+      - '3000:3000'
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-${teamname:-defaultASW}
+    profiles: ['dev', 'prod']
+    networks:
+      - mynetwork
+    volumes:
+      - ./gatewayservice/monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    ports:
+      - '9090:9090'
+    depends_on:
+      - gatewayservice
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana-${teamname:-defaultASW}
+    profiles: ['dev', 'prod']
+    networks:
+      - mynetwork
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./gatewayservice/monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SERVER_HTTP_PORT=9091
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - '9091:9091'
+    depends_on:
+      - prometheus
+
+volumes:
+  mongodb_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  mynetwork:
+    driver: bridge

@@ -1,0 +1,88 @@
+[[section-system-scope-and-context]]
+
+== System Scope and Context
+
+=== Business Context
+
+[plantuml, "business_context", svg]
+----
+actor player
+rectangle wiq as "wiq"
+rectangle wikidata as "wikidata"
+
+player -right-> wiq: interacts
+wiq <-right-> wikidata: queries
+----
+
+
+[cols="1,2" options="header"]
+|===
+| Name | Description
+| Player | The user who plays the game.
+| Wiq | The application is used by players and interacts with Wikidata to automatically generate questions.
+| Wikidata | Collaborative database of free knowledge that stores structured data (https://www.wikidata.org/).
+|===
+
+=== Technical Context
+
+[plantuml, "technical_context", svg]
+----
+left to right direction
+
+actor user as "user"
+Component web as "wiq" { 
+  Component front as "Frontend"
+  Component "Services"  {
+    Component gw as "Gateway"
+    Component userserv as "User service"
+    Component authserv as "Authentication service"
+    Component statsserv as "Statistic service"
+    Component questionserv as "Question service"
+  }
+database mongo as "MongDB"      
+}
+Component wikidata
+
+user <--> front: interact
+front <--> gw: interact
+
+gw <--> userserv: register
+gw <--> authserv: login
+gw <--> statsserv: generate stats
+gw <--> questionserv: generate questions
+
+userserv <--> mongo: read/write
+authserv <--> mongo: read/write
+statsserv <--> mongo: read/write
+questionserv <--> mongo: read/write
+questionserv <-l-> wikidata: query
+
+userserv -[hidden]l- authserv
+authserv -[hidden]l- statsserv
+statsserv -[hidden]l- questionserv
+----
+
+[cols="1,2" options="header"]
+|===
+| Name | Description
+| User 
+| The user who plays the game.
+| Wiq 
+| The application is used by players and interacts with Wikidata to automatically generate questions.
+| Frontend
+| The user interface of the application.
+| Gateway
+| The entry point of the application.
+| User service
+| Manages user data.
+| Authentication service
+| Manages user authentication.
+| Statistic service
+| Manages game statistics.
+| Question service
+| Handles the generation and formulation of game questions.
+| MongoDB
+| Database used to store the data of the application.
+| Wikidata 
+| Collaborative database of free knowledge that stores structured data (https://www.wikidata.org/).
+|===

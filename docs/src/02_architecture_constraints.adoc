@@ -1,0 +1,37 @@
+[[section-architecture-constraints]]
+
+== Architecture Constraints
+
+=== Technical Architecture Constraints
+
+[cols="1,2", options="header"]
+|===
+| Technical architecture constraints | Description
+| Web application 
+| As indicated in RE1, access to the application shall be through the web, so a web application must be developed rather than a desktop application.
+| Wikidata
+| As indicated in RE3, the questions shall be automatically generated from Wikidata data.
+| Github
+| The project shall be hosted in a GitHub repository created by the ArquiSoft organization for the Software Architecture course at the School of Software Engineering at the University of Oviedo.
+| Github actions
+| The project shall use GitHub Actions to automate the testing and deployment processes.
+| Docker
+| The project shall use Docker to containerize the application.
+|===
+
+=== Organizational and Political Constraints
+
+[cols="1,2", options="header"]
+|===
+| Organizational and political constraints | Description
+| Development time | The team shall develop the application in accordance with the established deadlines, even if this means using alternative development technologies or altering the original architectural decisions.
+| Compliance with privacy regulations | The application shall adhere to updated data privacy regulations to ensure the confidentiality of the contestants.
+|===
+
+=== Conventions
+
+[cols="1,2", options="header"]
+|===
+| Conventions | Description
+| Documentation | The development team shall use arc42 to document the application architecture, design decisions, and implementation details, ensuring ease of future updates and maintenance.
+|===

@@ -1,0 +1,146 @@
+name: Deploy on release
+on:
+  release:
+    types: [published]
+
+jobs:
+  docker-push-webapp:
+    name: Push webapp Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        env:
+          API_URI: http://${{ secrets.DEPLOY_HOST }}:8000
+        with:
+          name: arquisoft/wiq_7/webapp
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: webapp
+          buildargs: API_URI
+  docker-push-authservice:
+    name: Push auth service Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: arquisoft/wiq_7/authservice
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: users/authservice
+  docker-push-userservice:
+    name: Push user service Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: arquisoft/wiq_7/userservice
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: users/userservice
+  docker-push-questionservice:
+    name: Push question service Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: arquisoft/wiq_7/questionservice
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: questionservice
+  docker-push-statservice:
+    name: Push stat service Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: arquisoft/wiq_7/statservice
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: statservice
+  docker-push-gatewayservice:
+    name: Push gateway service Docker Image to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "NODE_ENV='production'" > gatewayservice/.env
+      - name: Update OpenAPI configuration
+        run: |
+          DEPLOY_HOST=${{ secrets.DEPLOY_HOST }}
+          sed -i "s/SOMEIP/${DEPLOY_HOST}/g" gatewayservice/openapi.yaml
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: arquisoft/wiq_7/gatewayservice
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: gatewayservice
+  deploy:
+    name: Deploy over SSH
+    runs-on: ubuntu-latest
+    needs:
+      [
+        docker-push-userservice,
+        docker-push-authservice,
+        docker-push-questionservice,
+        docker-push-statservice,
+        docker-push-gatewayservice,
+        docker-push-webapp,
+      ]
+    steps:
+      - name: Deploy over SSH
+        uses: fifsky/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          user: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          command: |
+            docker system prune --all --volumes --force
+            echo "teamname='wiq_7'" > .env
+            echo "MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}" >> .env
+            echo "MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}" >> .env
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/docker-compose.yml -O docker-compose.yml
+            mkdir -p errors
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/errors/customErrors.js -O errors/customErrors.js
+            mkdir -p middleware
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/auth-middleware.js -O middleware/auth-middleware.js
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/validation-middleware.js -O middleware/validation-middleware.js
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/errorhandler-middleware.js -O middleware/errorhandler-middleware.js
+            mkdir -p utils
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/utils/tokenUtils.js -O utils/tokenUtils.js
+            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/utils/passwordUtils.js -O utils/passwordUtils.js
+            docker compose --profile prod down
+            docker compose --profile prod up -d --pull always
