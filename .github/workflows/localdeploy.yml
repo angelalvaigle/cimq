@@ -18,7 +18,7 @@ jobs:
         env:
           API_URI: http://${{ secrets.DEPLOY_HOST }}:8000
         with:
-          name: arquisoft/wiq_7/webapp
+          name: angelalvaigle/cimq/webapp
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -35,7 +35,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: arquisoft/wiq_7/authservice
+          name: angelalvaigle/cimq/authservice
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -51,7 +51,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: arquisoft/wiq_7/userservice
+          name: angelalvaigle/cimq/userservice
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -67,7 +67,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: arquisoft/wiq_7/questionservice
+          name: angelalvaigle/cimq/questionservice
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -83,7 +83,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: arquisoft/wiq_7/statservice
+          name: angelalvaigle/cimq/statservice
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -104,7 +104,7 @@ jobs:
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: arquisoft/wiq_7/gatewayservice
+          name: angelalvaigle/cimq/gatewayservice
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
@@ -133,15 +133,15 @@ jobs:
             echo "teamname='wiq_7'" > .env
             echo "MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}" >> .env
             echo "MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}" >> .env
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/docker-compose.yml -O docker-compose.yml
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/docker-compose.yml -O docker-compose.yml
             mkdir -p errors
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/errors/customErrors.js -O errors/customErrors.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/errors/customErrors.js -O errors/customErrors.js
             mkdir -p middleware
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/auth-middleware.js -O middleware/auth-middleware.js
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/validation-middleware.js -O middleware/validation-middleware.js
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/middleware/errorhandler-middleware.js -O middleware/errorhandler-middleware.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/middleware/auth-middleware.js -O middleware/auth-middleware.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/middleware/validation-middleware.js -O middleware/validation-middleware.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/middleware/errorhandler-middleware.js -O middleware/errorhandler-middleware.js
             mkdir -p utils
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/utils/tokenUtils.js -O utils/tokenUtils.js
-            wget https://raw.githubusercontent.com/arquisoft/wiq_7/master/utils/passwordUtils.js -O utils/passwordUtils.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/utils/tokenUtils.js -O utils/tokenUtils.js
+            wget https://raw.githubusercontent.com/angelalvaigle/cimq/master/utils/passwordUtils.js -O utils/passwordUtils.js
             docker compose --profile prod down
             docker compose --profile prod up -d --pull always
